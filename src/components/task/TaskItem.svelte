@@ -60,6 +60,9 @@
 
 <script>
 	import taskStore from './task-store'
+	import { createEventDispatcher } from 'svelte'
+
+	const dispatch = createEventDispatcher()
 
 	export let task
 
@@ -69,12 +72,16 @@
 
 	function close() {
 		task.done = true
-		taskStore.toggle(task)
+		taskStore.update(task)
 	}
 
 	function reopen() {
 		task.done = false
-		taskStore.toggle(task)
+		taskStore.update(task)
+	}
+
+	function modify() {
+		dispatch('edit', { ...task })
 	}
 </script>
 
@@ -82,6 +89,7 @@
 	<p>{task.description}</p>
 	<div class="actions">
 		{#if !task.done}
+			<button class="btn btn-green" on:click="{modify}">Modify</button>
 			<button class="btn btn-green" on:click="{close}">Close</button>
 			<button class="btn btn-red" on:click="{remove}">Remove</button>
 		{:else}

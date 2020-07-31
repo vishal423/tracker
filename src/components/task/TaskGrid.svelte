@@ -47,10 +47,10 @@
 		<div class="title">Open</div>
 		{#each openTasks as task (task.id)}
 			<div in:receive="{{ key: task.id }}" out:send="{{ key: task.id }}">
-				<TaskItem {task} />
+				<TaskItem {task} on:edit />
 			</div>
 		{:else}
-			<p>Hurray! No open tasks</p>
+			<p>Hooray! No work today!</p>
 		{/each}
 	</div>
 
@@ -58,10 +58,10 @@
 		<div class="title">Closed</div>
 		{#each closedTasks as task (task.id)}
 			<div in:receive="{{ key: task.id }}" out:send="{{ key: task.id }}">
-				<TaskItem {task} />
+				<TaskItem {task} on:edit />
 			</div>
 		{:else}
-			<p>No close tasks</p>
+			<p>It's time to do some work!</p>
 		{/each}
 	</div>
 </div>

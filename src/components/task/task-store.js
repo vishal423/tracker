@@ -3,22 +3,11 @@ import { writable } from 'svelte/store'
 let uid = 1
 
 const taskStore = writable([], (set) => {
-	const dummy = [
-		{ id: uid++, done: false, description: 'write some docs' },
-		{
-			id: uid++,
-			done: false,
-			description: 'start writing blog post',
-		},
-		{ id: uid++, done: true, description: 'buy some milk' },
-		{ id: uid++, done: false, description: 'mow the lawn' },
-		{ id: uid++, done: false, description: 'feed the turtle' },
-		{ id: uid++, done: false, description: 'fix some bugs' },
-	]
 	const tasks = localStorage.getItem('tasks')
-		? localStorage.getItem('tasks')
-		: dummy
-
+		? JSON.parse(localStorage.getItem('tasks'))
+		: []
+	const ids = tasks.map((task) => task.id).sort()
+	uid = ids && ids.length ? ids[0] : 1
 	set(tasks)
 	return () => console.log('no more subscribers')
 })
@@ -26,15 +15,28 @@ const taskStore = writable([], (set) => {
 export default {
 	subscribe: taskStore.subscribe,
 	add: (task) => {
-		taskStore.update((tasks) => [task, ...tasks])
+		taskStore.update((tasks) => {
+			const updated = [
+				{ ...task, id: ++uid, done: false, status: 'G' },
+				...tasks,
+			]
+			localStorage.setItem('tasks', JSON.stringify(updated))
+			return updated
+		})
 	},
 	remove: (task) => {
-		taskStore.update((tasks) => tasks.filter((t) => t.id !== task.id))
+		taskStore.update((tasks) => {
+			const updated = tasks.filter((t) => t.id !== task.id)
+			localStorage.setItem('tasks', JSON.stringify(updated))
+			return updated
+		})
 	},
-	toggle: (task) => {
+	update: (task) => {
 		taskStore.update((tasks) => {
 			const filteredTasks = tasks.filter((t) => t.id !== task.id)
-			return [...filteredTasks, task]
+			const updated = [...filteredTasks, task]
+			localStorage.setItem('tasks', JSON.stringify(updated))
+			return updated
 		})
 	},
 }
