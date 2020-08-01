@@ -4,10 +4,18 @@
 		border-radius: 3px;
 		transition: opacity 0.2s;
 		cursor: pointer;
-		margin: 0;
+		margin: 0 auto;
 		text-transform: uppercase;
-		width: 100%;
+		width: 90%;
 		height: 3rem;
+	}
+
+	main {
+		height: 100%;
+	}
+
+	div {
+		text-align: center;
 	}
 </style>
 
@@ -40,6 +48,8 @@
 	{#if edit}
 		<TaskDetail {task} on:close="{close}" />
 	{/if}
-	<button on:click="{toggle}">Create task</button>
+	<div>
+		<button on:click="{toggle}">Create task</button>
+	</div>
 	<TaskGrid tasks="{$tasks}" on:edit="{editTask}" />
 </main>

@@ -12,13 +12,12 @@
 
 	.modal {
 		position: fixed;
-		top: 10rem;
-		left: 10rem;
-		height: calc(100% - 20rem);
+		top: 10%;
+		right: 20%;
+		bottom: 10%;
+		left: 20%;
 		z-index: 200;
 		background-color: #fff;
-		right: 10rem;
-		bottom: 10rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;

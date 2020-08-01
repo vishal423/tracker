@@ -3,7 +3,8 @@
 		margin: 0.75rem;
 	}
 
-	input,
+	input[type='text'],
+	input[type='number'],
 	textarea {
 		border-left: 0;
 		border-right: 0;
@@ -11,6 +12,23 @@
 		padding: 0.25rem 0.75rem;
 		width: 100%;
 		outline: none;
+	}
+
+	input[type='radio'] {
+		margin-right: 0.5rem;
+	}
+
+	input[type='radio']:first-child {
+		margin-left: 0.75rem;
+	}
+
+	.status {
+		display: inline-block;
+		padding-right: 1.5rem;
+	}
+
+	.status:last-child {
+		padding-right: 0;
 	}
 </style>
 
@@ -21,7 +39,7 @@
 
 	const dispatch = createEventDispatcher()
 
-	export let task = { title: '', description: '' }
+	export let task = { title: '', description: '', status: 'R', risk: 'G' }
 
 	function saveTask(event) {
 		if (task.id) {
@@ -34,7 +52,7 @@
 	}
 
 	function resetState() {
-		task = { title: '', description: '' }
+		task = { title: '', description: '', status: 'R', risk: 'G' }
 	}
 </script>
 
@@ -42,25 +60,77 @@
 	<span slot="header">Create a new task</span>
 	<form>
 		<div class="form-control">
-			<label for="title">
+			<label>
+				Category
+				<input
+					type="text"
+					name="category"
+					bind:value="{task.category}"
+					placeholder="Task category"
+				/>
+			</label>
+		</div>
+		<div class="form-control">
+			<label>
 				Title
 				<input
 					type="text"
 					name="title"
 					bind:value="{task.title}"
-					placeholder="Add new task"
+					placeholder="Task title"
 				/>
 			</label>
 		</div>
 		<div class="form-control">
-			<label for="description">
+			<label>
+				Efforts
+				<input
+					type="number"
+					name="title"
+					bind:value="{task.efforts}"
+					placeholder="Efforts in hours"
+				/>
+			</label>
+		</div>
+		<div class="form-control">
+			<label>
 				Description
 				<textarea
 					name="description"
 					bind:value="{task.description}"
-					rows="2"
-					placeholder="Add task description"
+					rows="1"
+					placeholder="Task description"
 				></textarea>
+			</label>
+		</div>
+		<div class="form-control">
+			<label>Status</label>
+			<label class="status">
+				<input type="radio" value="R" bind:group="{task.status}" />
+				Ready
+			</label>
+			<label class="status">
+				<input type="radio" value="P" bind:group="{task.status}" />
+				In Progress
+			</label>
+			<label class="status">
+				<input type="radio" value="W" bind:group="{task.status}" />
+				Waiting
+			</label>
+		</div>
+		<div class="form-control">
+			<label>Risk</label>
+			<label class="status">
+				<input type="radio" value="G" bind:group="{task.risk}" />
+				Green
+			</label>
+			<label class="status">
+				<input type="radio" value="O" bind:group="{task.risk}" />
+				Orange
+			</label>
+			<label class="status">
+				<input type="radio" value="R" bind:group="{task.risk}" />
+				Red
 			</label>
 		</div>
 	</form>

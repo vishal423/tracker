@@ -1,10 +1,15 @@
 <style>
 	.container {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		max-width: 90%;
-		gap: 5em;
+		gap: 1rem;
 		margin: 0.5em auto;
+		height: calc(100% - 3.5rem);
+	}
+
+	.container div {
+		background-color: hsl(240, 8%, 93%);
 	}
 
 	.title {
@@ -22,8 +27,10 @@
 
 	export let tasks
 
-	$: openTasks = tasks.filter((task) => !task.done)
-	$: closedTasks = tasks.filter((task) => task.done)
+	$: openTasks = tasks.filter((task) => task.status === 'R')
+	$: progressTasks = tasks.filter((task) => task.status === 'P')
+	$: waitingTasks = tasks.filter((task) => task.status === 'W')
+	$: closedTasks = tasks.filter((task) => task.status === 'C')
 
 	const [send, receive] = crossfade({
 		duration: 300,
@@ -43,7 +50,7 @@
 </script>
 
 <div class="container">
-	<div class="open">
+	<div>
 		<div class="title">Open</div>
 		{#each openTasks as task (task.id)}
 			<div in:receive="{{ key: task.id }}" out:send="{{ key: task.id }}">
@@ -54,7 +61,29 @@
 		{/each}
 	</div>
 
-	<div class="closed">
+	<div>
+		<div class="title">In Progress</div>
+		{#each progressTasks as task (task.id)}
+			<div in:receive="{{ key: task.id }}" out:send="{{ key: task.id }}">
+				<TaskItem {task} on:edit />
+			</div>
+		{:else}
+			<p>Hooray! No work today!</p>
+		{/each}
+	</div>
+
+	<div>
+		<div class="title">Waiting</div>
+		{#each waitingTasks as task (task.id)}
+			<div in:receive="{{ key: task.id }}" out:send="{{ key: task.id }}">
+				<TaskItem {task} on:edit />
+			</div>
+		{:else}
+			<p>Hooray! No work today!</p>
+		{/each}
+	</div>
+
+	<div>
 		<div class="title">Closed</div>
 		{#each closedTasks as task (task.id)}
 			<div in:receive="{{ key: task.id }}" out:send="{{ key: task.id }}">

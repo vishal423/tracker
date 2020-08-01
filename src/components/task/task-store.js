@@ -16,10 +16,7 @@ export default {
 	subscribe: taskStore.subscribe,
 	add: (task) => {
 		taskStore.update((tasks) => {
-			const updated = [
-				{ ...task, id: ++uid, done: false, status: 'G' },
-				...tasks,
-			]
+			const updated = [{ ...task, id: ++uid }, ...tasks]
 			localStorage.setItem('tasks', JSON.stringify(updated))
 			return updated
 		})
